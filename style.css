@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #171226;
+  --surface: #211a35;
+  --surface-raised: #2a2143;
+  --text: #efe9f5;
+  --muted: #9d92b8;
+  --amber: #f2a154;
+  --teal: #5fc9ba;
+  --rose: #e07a8f;
+  --violet: #9b8cf2;
+  --correct: #4f9d6e;
+  --incorrect: #c15b5b;
+  --radius-card: 18px;
+  --radius-chip: 999px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(155, 140, 242, 0.12), transparent 45%),
+    radial-gradient(circle at 85% 100%, rgba(95, 201, 186, 0.10), transparent 45%),
+    var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  padding: 40px 20px;
+}
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+
+#disclaimer {
+  max-width: 440px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+#card {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  padding: 32px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+  animation: rise 0.5s ease-out;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* corner notch, like a torn puzzle-piece corner */
+#card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 28px;
+  width: 22px;
+  height: 22px;
+  background: var(--bg);
+  border-radius: 0 0 50% 50%;
+}
+
+#progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+#progressText {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+#typeTag {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: var(--radius-chip);
+  background: rgba(242, 161, 84, 0.16);
+  color: var(--amber);
+}
+#typeTag[data-type="Verbal analogy"] { background: rgba(224, 122, 143, 0.16); color: var(--rose); }
+#typeTag[data-type="Shape pattern"]  { background: rgba(95, 201, 186, 0.16); color: var(--teal); }
+#typeTag[data-type="Logic"]         { background: rgba(155, 140, 242, 0.16); color: var(--violet); }
+
+#question {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  line-height: 1.4;
+  margin-bottom: 22px;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 13px 16px;
+  margin-bottom: 10px;
+  background: var(--surface-raised);
+  border: 1.5px solid transparent;
+  border-radius: 10px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+.option:hover:not([disabled]) {
+  border-color: var(--violet);
+}
+.option:active:not([disabled]) {
+  transform: scale(0.99);
+}
+.option.correct {
+  background: rgba(79, 157, 110, 0.22);
+  border-color: var(--correct);
+}
+.option.incorrect {
+  background: rgba(193, 91, 91, 0.22);
+  border-color: var(--incorrect);
+}
+.option[disabled] { cursor: default; }
+
+#nextBtn, #restartBtn {
+  margin-top: 6px;
+  padding: 12px 22px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--amber);
+  color: #201409;
+  border: none;
+  border-radius: 10px;
+  transition: filter 0.15s ease;
+}
+#nextBtn:hover:not(:disabled), #restartBtn:hover {
+  filter: brightness(1.08);
+}
+#nextBtn:disabled {
+  background: var(--surface-raised);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+#resultScreen { text-align: center; }
+#resultScreen h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+#resultMsg {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+footer {
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 440px;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #card { animation: none; }
+  .option { transition: none; }
+}

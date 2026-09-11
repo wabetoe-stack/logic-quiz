@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Logic & Pattern Quiz</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Logic & Pattern Quiz</h1>
+  <p id="disclaimer">
+    A short set of logic, number, shape, and verbal puzzles —
+    not a scientifically validated IQ test. Real IQ tests require
+    standardized, professionally administered assessment.
+  </p>
+
+  <div id="card">
+    <div id="quizScreen">
+      <div id="progress">
+        <span id="progressText"></span>
+        <span id="typeTag"></span>
+      </div>
+      <div id="question"></div>
+      <div id="options"></div>
+      <button id="nextBtn" disabled>Next</button>
+    </div>
+    <div id="resultScreen" style="display:none;">
+      <h2 id="resultScore"></h2>
+      <p id="resultMsg"></p>
+      <button id="restartBtn">Try again</button>
+    </div>
+  </div>
+
+<script>
+const questions = [
+  { type: "Number pattern", q: "What comes next? 2, 4, 8, 16, __", options: ["24", "32", "30", "18"], answer: 1 },
+  { type: "Number pattern", q: "What comes next? 1, 1, 2, 3, 5, 8, __", options: ["11", "12", "13", "10"], answer: 2 },
+  { type: "Math", q: "If a train travels 60 km in 1.5 hours, what is its speed in km/h?", options: ["30", "40", "45", "90"], answer: 1 },
+  { type: "Verbal analogy", q: "Book is to Read as Fork is to __", options: ["Kitchen", "Eat", "Spoon", "Cook"], answer: 1 },
+  { type: "Verbal analogy", q: "Bird is to Nest as Bee is to __", options: ["Flower", "Hive", "Sky", "Honey"], answer: 1 },
+  { type: "Shape pattern", q: "Which shape continues the sequence? ● ▲ ● ▲ ● __", options: ["●", "▲", "■", "◆"], answer: 1 },
+  { type: "Shape pattern", q: "Which figure completes the pattern? ◻ ◼ ◻ ◼ ◻ __", options: ["◻", "◼", "◻◼", "▨"], answer: 1 },
+  { type: "Logic", q: "All roses are flowers. Some flowers fade quickly. Which must be true?", options: ["All roses fade quickly", "Some roses fade quickly", "No roses fade quickly", "None of the above must be true"], answer: 3 },
+  { type: "Logic", q: "If today is Wednesday, what day will it be 100 days from now?", options: ["Monday", "Tuesday", "Thursday", "Friday"], answer: 2 },
+  { type: "Number pattern", q: "What comes next? 3, 6, 12, 24, __", options: ["36", "48", "27", "30"], answer: 1 },
+  { type: "Verbal analogy", q: "Doctor is to Hospital as Teacher is to __", options: ["Book", "Student", "School", "Lesson"], answer: 2 },
+  { type: "Math", q: "A shirt costs $40 after a 20% discount. What was the original price?", options: ["$48", "$50", "$45", "$60"], answer: 1 }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+const progressText = document.getElementById('progressText');
+const typeTag = document.getElementById('typeTag');
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const nextBtn = document.getElementById('nextBtn');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+const resultScore = document.getElementById('resultScore');
+const resultMsg = document.getElementById('resultMsg');
+const restartBtn = document.getElementById('restartBtn');
+
+function loadQuestion() {
+  answered = false;
+  nextBtn.disabled = true;
+  const q = questions[current];
+  progressText.textContent = `Question ${current + 1} of ${questions.length}`;
+  typeTag.textContent = q.type;
+  typeTag.dataset.type = q.type;
+  questionEl.textContent = q.q;
+  optionsEl.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => selectAnswer(i));
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const buttons = optionsEl.querySelectorAll('.option');
+  buttons.forEach((b, idx) => {
+    b.disabled = true;
+    if (idx === q.answer) b.classList.add('correct');
+    else if (idx === i) b.classList.add('incorrect');
+  });
+  if (i === q.answer) score++;
+  nextBtn.disabled = false;
+}
+
+nextBtn.addEventListener('click', () => {
+  current++;
+  if (current < questions.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult() {
+  quizScreen.style.display = 'none';
+  resultScreen.style.display = 'block';
+  resultScore.textContent = `${score} out of ${questions.length} correct`;
+  const pct = score / questions.length;
+  let msg;
+  if (pct >= 0.9) msg = "Excellent pattern recognition and logic skills.";
+  else if (pct >= 0.7) msg = "Strong performance across most categories.";
+  else if (pct >= 0.5) msg = "A solid mixed result — some categories were trickier.";
+  else msg = "Some categories tripped you up — worth another attempt.";
+  resultMsg.textContent = msg;
+}
+
+restartBtn.addEventListener('click', () => {
+  current = 0;
+  score = 0;
+  quizScreen.style.display = 'block';
+  resultScreen.style.display = 'none';
+  loadQuestion();
+});
+
+loadQuestion();
+</script>
+</body>
+</html>
